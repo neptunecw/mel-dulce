@@ -8,9 +8,25 @@ function renderItemList() {
   const list = document.getElementById("itemList");
   list.innerHTML = ""; // Clear current list
 
-  jarContents.forEach((item) => {
+  jarContents.forEach((item, index) => {
     const li = document.createElement("li");
     li.textContent = item;
+    li.contentEditable = "true";
+
+    // Save edits on blur (when user clicks away)
+    li.addEventListener("blur", () => {
+      jarContents[index] = li.textContent.trim();
+      saveJar();
+      renderItemList(); // Re-render to keep data consistent
+    });
+
+    // Delete item on double-click
+    li.addEventListener("dblclick", () => {
+      jarContents.splice(index, 1);
+      saveJar();
+      renderItemList();
+    });
+
     list.appendChild(li);
   });
 }
@@ -24,7 +40,6 @@ function addItem() {
     saveJar();
     input.value = "";
     renderItemList();
-    alert(`"${value}" added to the jar!`);
   }
 }
 
@@ -33,7 +48,6 @@ function clearJar() {
     jarContents = [];
     saveJar();
     renderItemList();
-    alert("Jar is now empty.");
   }
 }
 
