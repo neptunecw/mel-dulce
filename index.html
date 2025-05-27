@@ -3,30 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <title>Movie Night</title>
-  <style>
-    body {
-      font-family: 'MedievalSharp', cursive;      text-align: center;
-      margin: 0;
-      padding: 20px;
-      background-image: url('gothic.png');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  </style>
+
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Optional: Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
 </head>
-<body><div class="container">
-  <img id="jar" src="awstenjar 2.png" alt="Jar" />
-  
-  <div id="slip" class="hidden"></div>
-<div id="slip" class="hidden"></div>
-<div class="jar-section">
-  <ul id="itemList"></ul>
-</div>  <input type="text" id="itemInput" placeholder="Enter a movie" />
+<body>
+
+  <!-- Container that holds jar + item list side by side -->
+  <div class="jar-section">
+    
+    <!-- Jar and slip -->
+    <div class="container">
+      <img id="jar" src="awstenjar 2.png" alt="Jar" />
+      <div id="slip" class="hidden"></div>
+    </div>
+
+    <!-- Item list to the right -->
+    <ul id="itemList"></ul>
+  </div>
+
+  <!-- Input and buttons below the main section -->
+  <input type="text" id="itemInput" placeholder="Enter a movie" />
   <button onclick="addItem()">Add to Jar</button>
   <button onclick="clearJar()">Clear Jar</button>
-<script src="style.css"></script>
-<script src="script.js"></script>
-</div>
+
+  <!-- Scripts at the bottom -->
+  <script src="script.js"></script>
 </body>
 </html>
