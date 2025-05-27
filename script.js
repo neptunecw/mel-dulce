@@ -1,9 +1,3 @@
-let jarContents = JSON.parse(localStorage.getItem("jarContents")) || [];
-
-function saveJar() {
-  localStorage.setItem("jarContents", JSON.stringify(jarContents));
-}
-
 function renderItemList() {
   const list = document.getElementById("itemList");
   list.innerHTML = "";
@@ -16,7 +10,6 @@ function renderItemList() {
     // Save changes when user clicks away or presses Enter
     li.addEventListener("blur", () => {
       jarContents[index] = li.textContent.trim();
-      saveJar();
       renderItemList();
     });
     
@@ -31,7 +24,6 @@ function renderItemList() {
     // Delete item on double-click
     li.addEventListener("dblclick", () => {
       jarContents.splice(index, 1);
-      saveJar();
       renderItemList();
     });
 
@@ -45,7 +37,6 @@ function addItem() {
 
   if (value !== "") {
     jarContents.push(value);
-    saveJar();
     input.value = "";
     renderItemList();
   }
@@ -54,7 +45,6 @@ function addItem() {
 function clearJar() {
   if (confirm("Clear all items in the jar?")) {
     jarContents = [];
-    saveJar();
     renderItemList();
   }
 }
@@ -80,3 +70,26 @@ jar.addEventListener("click", () => {
 
 // Initial render on page load
 renderItemList();
+
+const sheetURL = "https://script.google.com/macros/s/AKfycby_HPTcd5RlG6hcYMg573g6S0bP2ToKeZEojaKDqJXCGoyE_s80BBrGWwLyfxJ5QuNF/exec";
+
+async function fetchMovies() {
+  const res = await fetch(sheetURL);
+  const data = await res.json();
+  jarContents = data;
+  renderItemList();
+}
+
+async function addItem() {
+  const input = document.getElementById("itemInput");
+  const value = input.value.trim();
+
+  if (value) {
+    await fetch(sheetURL, {
+      method: "POST",
+      body: new URLSearchParams({ movie: value })
+    });
+    input.value = "";
+    fetchMovies(); // Refresh list
+  }
+}
