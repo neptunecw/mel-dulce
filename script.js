@@ -1,5 +1,4 @@
 const sheetURL = "https://script.google.com/macros/s/AKfycby_HPTcd5RlG6hcYMg573g6S0bP2ToKeZEojaKDqJXCGoyE_s80BBrGWwLyfxJ5QuNF/exec";
-
 let jarContents = [];
 
 // Fetch full list from Google Sheet
@@ -48,10 +47,11 @@ async function updateItem(id, newValue) {
 // Delete an item from the sheet
 async function deleteItem(id) {
   if (!confirm("Delete this item?")) return;
+
   try {
-    await fetch(sheetURL, {
+    const url = `${sheetURL}?id=${encodeURIComponent(id)}`;
+    await fetch(url, {
       method: "DELETE",
-      body: new URLSearchParams({ id: id }),
     });
     await fetchMovies();
   } catch (error) {
@@ -74,8 +74,7 @@ function renderItemList() {
       if (newValue && newValue !== movie) {
         updateItem(id, newValue);
       } else {
-        // If empty, reset to old value
-        li.textContent = movie;
+        li.textContent = movie; // reset if empty or unchanged
       }
     });
 
@@ -94,7 +93,7 @@ function renderItemList() {
   });
 }
 
-// Jar click animation and random selection
+// Jar click: show random item with shake animation
 const jar = document.getElementById("jar");
 jar.addEventListener("click", () => {
   const slip = document.getElementById("slip");
@@ -112,5 +111,5 @@ jar.addEventListener("click", () => {
   slip.classList.remove("hidden");
 });
 
-// Initial load
+// On page load
 fetchMovies();
