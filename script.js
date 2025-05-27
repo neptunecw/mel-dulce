@@ -6,18 +6,26 @@ function saveJar() {
 
 function renderItemList() {
   const list = document.getElementById("itemList");
-  list.innerHTML = ""; // Clear current list
+  list.innerHTML = "";
 
   jarContents.forEach((item, index) => {
     const li = document.createElement("li");
     li.textContent = item;
     li.contentEditable = "true";
 
-    // Save edits on blur (when user clicks away)
+    // Save changes when user clicks away or presses Enter
     li.addEventListener("blur", () => {
       jarContents[index] = li.textContent.trim();
       saveJar();
-      renderItemList(); // Re-render to keep data consistent
+      renderItemList();
+    });
+    
+    // Optional: save on Enter key and remove focus to trigger blur
+    li.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault(); // prevent newline
+        li.blur();
+      }
     });
 
     // Delete item on double-click
@@ -70,5 +78,5 @@ jar.addEventListener("click", () => {
   slip.classList.remove("hidden");
 });
 
-// Render list on load
+// Initial render on page load
 renderItemList();
